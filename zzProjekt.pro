@@ -24,8 +24,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+    backend/appuser.cpp \
+    ui/loginwindow.cpp \
+    ui/mainwindow.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += \
+    backend/appuser.h \
+    ui/loginwindow.h \
+    ui/mainwindow.h
 
-FORMS    += mainwindow.ui
+FORMS    += \
+    ui/loginwindow.ui \
+    ui/mainwindow.ui

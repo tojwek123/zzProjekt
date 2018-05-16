@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include "backend/appuser.h"
+#include "backend/dbconnection.h"
 
 namespace Ui {
 class LoginWindow;
@@ -26,7 +27,7 @@ private slots:
     void onCancelButtonClicked(bool);
 
 signals:
-    void loginEntered(AppUserType type, QString login, QString password);
+    void loginEntered(int userType, QString login, QString password);
     void loginCancelled();
 };
 

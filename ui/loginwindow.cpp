@@ -11,6 +11,11 @@ LoginWindow::LoginWindow(QWidget *parent) :
 
     this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
     this->setFixedSize(this->size());
+    this->setModal(true);
+
+    this->ui->userTypeComboBox->addItem(AppUser::typeToStr(AppUser::Racer), AppUser::Racer);
+    this->ui->userTypeComboBox->addItem(AppUser::typeToStr(AppUser::Cashier), AppUser::Cashier);
+    this->ui->userTypeComboBox->addItem(AppUser::typeToStr(AppUser::Administrator), AppUser::Administrator);
 
     connect(ui->okButton, &QPushButton::clicked,
             this, &LoginWindow::onOkButtonClicked);
@@ -43,11 +48,21 @@ void LoginWindow::onOkButtonClicked(bool)
     }
     else
     {
-        this->hide();
-        AppUserType type = static_cast<AppUserType>(this->ui->userTypeComboBox->currentIndex());
+        int userType = this->ui->userTypeComboBox->currentData().toInt();
         QString name = this->ui->loginLineEdit->text();
         QString password = this->ui->passwordLineEdit->text();
-        emit this->loginEntered(type, name, password);
+
+        bool loginValid = DbConnection::getInstance().validateLogin(userType, name, password);
+
+        if (loginValid)
+        {
+            this->hide();
+            emit this->loginEntered(userType, name, password);
+        }
+        else
+        {
+            QMessageBox::warning(this, "Warning", "Incorrect password");
+        }
     }
 }
 

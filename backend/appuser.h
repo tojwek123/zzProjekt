@@ -1,18 +1,16 @@
 #ifndef APPUSER_H
 #define APPUSER_H
 
-enum class AppUserType
-{
-    Racer,
-    Cashier,
-    Mechanic,
-    Administrator
-};
+#include <QString>
 
 class AppUser
 {
 public:
-    AppUser();
+    static const int Racer = 1;
+    static const int Cashier = 2;
+    static const int Administrator = 3;
+
+    static QString typeToStr(int type);
 };
 
 #endif // APPUSER_H

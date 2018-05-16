@@ -71,28 +71,7 @@
     <widget class="QLineEdit" name="loginLineEdit"/>
    </item>
    <item row="0" column="2" colspan="2">
-    <widget class="QComboBox" name="userTypeComboBox">
-     <item>
-      <property name="text">
-       <string>Racer</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Cashier</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Mechanic</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Administrator</string>
-      </property>
-     </item>
-    </widget>
+    <widget class="QComboBox" name="userTypeComboBox"/>
    </item>
    <item row="1" column="0">
     <widget class="QLabel" name="loginLabel">

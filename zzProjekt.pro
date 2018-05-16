@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -26,13 +26,18 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += main.cpp\
     backend/appuser.cpp \
     ui/loginwindow.cpp \
-    ui/mainwindow.cpp
+    ui/mainwindow.cpp \
+    ui/racerview.cpp \
+    backend/dbconnection.cpp
 
 HEADERS  += \
     backend/appuser.h \
     ui/loginwindow.h \
-    ui/mainwindow.h
+    ui/mainwindow.h \
+    ui/racerview.h \
+    backend/dbconnection.h
 
 FORMS    += \
     ui/loginwindow.ui \
-    ui/mainwindow.ui
+    ui/mainwindow.ui \
+    ui/racerview.ui

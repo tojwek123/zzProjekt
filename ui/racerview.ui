@@ -24,33 +24,7 @@
        <string>Races</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="0" column="0">
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>Coming races:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="QPushButton" name="pushButton">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>100</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>Plan next race</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="2">
+       <item row="2" column="4">
         <widget class="QPushButton" name="pushButton_2">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -69,8 +43,34 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="0" colspan="3">
-        <widget class="QTableView" name="tableView_2"/>
+       <item row="2" column="3">
+        <widget class="QPushButton" name="planNextRaceButton">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>100</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Plan next race</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Coming races:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1" colspan="4">
+        <widget class="QTableWidget" name="reservedRacesTable"/>
        </item>
       </layout>
      </widget>
@@ -87,7 +87,7 @@
         </widget>
        </item>
        <item row="1" column="0">
-        <widget class="QTableView" name="tableView"/>
+        <widget class="QTableWidget" name="personalLapTimesTable"/>
        </item>
       </layout>
      </widget>
@@ -96,15 +96,8 @@
        <string>Leaderboard</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_4">
-       <item row="0" column="0">
-        <widget class="QLabel" name="label_4">
-         <property name="text">
-          <string>Leaderboard:</string>
-         </property>
-        </widget>
-       </item>
        <item row="2" column="1">
-        <widget class="QPushButton" name="pushButton_3">
+        <widget class="QPushButton" name="findMyBestTimeButton">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -122,8 +115,15 @@
          </property>
         </widget>
        </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string>Leaderboard:</string>
+         </property>
+        </widget>
+       </item>
        <item row="1" column="0" colspan="2">
-        <widget class="QTableView" name="tableView_3"/>
+        <widget class="QTableWidget" name="leaderboardTable"/>
        </item>
       </layout>
      </widget>

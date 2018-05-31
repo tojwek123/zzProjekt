@@ -9,8 +9,6 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    connect(ui->pushButton, &QPushButton::clicked,
-            this, &MainWindow::onPushButton);
     connect(&loginWindow, &LoginWindow::loginEntered,
             this, &MainWindow::onLoginEntered);
     connect(&loginWindow, &LoginWindow::loginCancelled,
@@ -20,9 +18,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
     qDebug() << dbConnected;
 
-    this->setCentralWidget(&racerView);
+    pRacerView = new RacerView(this);
+    pRacerView->setRacer(1, "Zdzisek");
+    this->setCentralWidget(pRacerView);
 
-    this->loginWindow.prompt();
+//    this->loginWindow.prompt();
 
 //    QSqlDatabase db = QSqlDatabase::addDatabase("QODBC");
 //    db.setDatabaseName("DRIVER={SQL SERVER};SERVER=DESKTOP-B6KDFI4\\SQLEXPRESS;DATABASE=wzemlik;");
@@ -53,15 +53,11 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::onPushButton(bool)
-{
-   loginWindow.prompt();
-}
-
-
 void MainWindow::onLoginEntered(int userType, QString name, QString password)
 {
-
+    static_cast<void>(userType);
+    static_cast<void>(name);
+    static_cast<void>(password);
 }
 
 void MainWindow::onLoginCancelled()

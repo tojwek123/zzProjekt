@@ -20,13 +20,12 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     LoginWindow loginWindow;
-    RacerView racerView;
+    RacerView *pRacerView;
 
 private:
     Ui::MainWindow *ui;
 
 private slots:
-    void onPushButton(bool);
     void onLoginEntered(int userType, QString name, QString password);
     void onLoginCancelled();
 };

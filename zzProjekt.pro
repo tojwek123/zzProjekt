@@ -28,16 +28,25 @@ SOURCES += main.cpp\
     ui/loginwindow.cpp \
     ui/mainwindow.cpp \
     ui/racerview.cpp \
-    backend/dbconnection.cpp
+    backend/dbconnection.cpp \
+    backend/timetablewidgetitem.cpp \
+    backend/datetimetablewidgetitem.cpp \
+    ui/planracedialog.cpp \
+    backend/specificdatescalendar.cpp
 
 HEADERS  += \
     backend/appuser.h \
     ui/loginwindow.h \
     ui/mainwindow.h \
     ui/racerview.h \
-    backend/dbconnection.h
+    backend/dbconnection.h \
+    backend/timetablewidgetitem.h \
+    backend/datetimetablewidgetitem.h \
+    ui/planracedialog.h \
+    backend/specificdatescalendar.h
 
 FORMS    += \
     ui/loginwindow.ui \
     ui/mainwindow.ui \
-    ui/racerview.ui
+    ui/racerview.ui \
+    ui/planracedialog.ui

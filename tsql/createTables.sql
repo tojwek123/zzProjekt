@@ -1,12 +1,18 @@
 USE trackDay
 
+DROP PROCEDURE getAvailableCars
+
+DROP TABLE reservedLaps
+DROP TABLE availableDates
+DROP TABLE laps
 DROP TABLE users
 DROP TABLE userTypes
+DROP TABLE cars
 
 CREATE TABLE userTypes (
 	id INT NOT NULL IDENTITY(1,1),
 	type VARCHAR(32) NOT NULL,
-	PRIMARY KEY(ID)
+	PRIMARY KEY(id)
 );
 
 CREATE TABLE users (
@@ -14,19 +20,41 @@ CREATE TABLE users (
 	typeId INT NOT NULL,
 	name VARCHAR(32) NOT NULL,
 	passwordSha1 VARCHAR(40) NOT NULL,
-	PRIMARY KEY(ID),
+	PRIMARY KEY(id),
 	FOREIGN KEY (typeId) REFERENCES userTypes(id)
 );
 
-INSERT INTO userTypes VALUES ('Racer');
-INSERT INTO userTypes VALUES ('Cashier');
-INSERT INTO userTypes VALUES ('Administrator');
+CREATE TABLE cars (
+	id INT NOT NULL IDENTITY(1, 1),
+	brand VARCHAR(32) NOT NULL,
+	model VARCHAR(32) NOT NULL,
+	PRIMARY KEY(id)
+);
 
-INSERT INTO users
-SELECT id, 'Zdzisek', 'b2bba6145b37e301dea598b4d23970ddc6e2f1a7'
-FROM userTypes WHERE type = 'Racer';
+CREATE TABLE laps (
+	id INT NOT NULL IDENTITY(1, 1),
+	userId INT NOT NULL,
+	duration TIME (3)  NOT NULL,
+	startDateTime DATETIME NOT NULL,
+	carId INT NOT NULL,
+	PRIMARY KEY(id),
+	FOREIGN KEY (userId) REFERENCES users(id),
+	FOREIGN KEY (carId) REFERENCES cars(id)
+);
 
-SELECT * FROM userTypes
-SELECT * FROM users
+CREATE TABLE availableDates (
+	id INT NOT NULL IDENTITY(1, 1),
+	date DATETIME NOT NULL,
+	PRIMARY KEY(id)
+);
 
-SELECT passwordSha1 FROM users WHERE typeId = 0 AND name = 'Zdzisek'
+CREATE TABLE reservedLaps (
+	id INT NOT NULL IDENTITY(1, 1),
+	dateId INT NOT NULL,
+	userId INT NOT NULL,
+	carId INT NOT NULL,
+	PRIMARY KEY(id),
+	FOREIGN KEY (userId) REFERENCES users(id),
+	FOREIGN KEY (dateId) REFERENCES availableDates(id),
+	FOREIGN KEY (carId) REFERENCES cars(id)
+);

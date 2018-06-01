@@ -6,7 +6,7 @@
 
 QT       += core gui sql
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
 TARGET = zzProjekt
 TEMPLATE = app
@@ -32,7 +32,9 @@ SOURCES += main.cpp\
     backend/timetablewidgetitem.cpp \
     backend/datetimetablewidgetitem.cpp \
     ui/planracedialog.cpp \
-    backend/specificdatescalendar.cpp
+    backend/specificdatescalendar.cpp \
+    backend/qcustomplot/qcustomplot.cpp \
+    ui/personaltimesplot.cpp
 
 HEADERS  += \
     backend/appuser.h \
@@ -43,10 +45,13 @@ HEADERS  += \
     backend/timetablewidgetitem.h \
     backend/datetimetablewidgetitem.h \
     ui/planracedialog.h \
-    backend/specificdatescalendar.h
+    backend/specificdatescalendar.h \
+    backend/qcustomplot/qcustomplot.h \
+    ui/personaltimesplot.h
 
 FORMS    += \
     ui/loginwindow.ui \
     ui/mainwindow.ui \
     ui/racerview.ui \
-    ui/planracedialog.ui
+    ui/planracedialog.ui \
+    ui/personaltimesplot.ui

@@ -1,8 +1,8 @@
 USE trackDay
 
-INSERT INTO laps
-SELECT id, '00:00:15.5', '2018-06-17 10:55:12', (SELECT id FROM cars WHERE brand = 'Ford' and model = 'Focus RS')
-FROM users WHERE name = 'Zdzisek'
+DELETE FROM reservedLaps WHERE id = 1
+
+SELECT * FROM reservedLaps
 
 --EXEC getReservedLapsPretty 1
 

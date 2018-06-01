@@ -6,7 +6,9 @@
 #include "backend/dbconnection.h"
 #include "backend/timetablewidgetitem.h"
 #include "backend/datetimetablewidgetitem.h"
+#include "backend/qcustomplot/qcustomplot.h"
 #include "ui/planracedialog.h"
+#include "ui/personaltimesplot.h"
 
 namespace Ui {
 class RacerView;
@@ -29,6 +31,7 @@ private:
     QString userName;
     int userId;
     PlanRaceDialog planRaceDialog;
+    PersonalTimesPlot personalTimesPlot;
 
     void updateReservedLaps();
     void updatePersonalLapTimes();
@@ -41,6 +44,7 @@ private slots:
     void onPlanRaceDialogRaceReserved();
     void onReservedRacesTableCustomContextMenuRequested(const QPoint &pt);
     void onCancelReservation();
+    void onPlotPersonalTimesButtonClicked(bool);
 };
 
 #endif // RACERVIEW_H

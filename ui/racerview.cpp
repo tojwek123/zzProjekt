@@ -21,6 +21,9 @@ RacerView::RacerView(QWidget *parent) :
     connect(&planRaceDialog, &PlanRaceDialog::raceReserved,
             this, &RacerView::onPlanRaceDialogRaceReserved);
 
+    connect(ui->plotPersonalTimesButton, &QPushButton::clicked,
+            this, &RacerView::onPlotPersonalTimesButtonClicked);
+
     /* Initialize reservedLapsTable */
     QStringList reservedRacesHeaderLabels;
     reservedRacesHeaderLabels.append("Date");
@@ -116,14 +119,17 @@ void RacerView::updatePersonalLapTimes()
 
     for (int i = 0; i < durations.length(); ++i)
     {
-        TimeTableWidgetItem *pDurations = new TimeTableWidgetItem(durations[i]);
-        DateTimeTableWidgetItem *pDates = new DateTimeTableWidgetItem(dates[i]);
+        TimeTableWidgetItem *pDurationItem = new TimeTableWidgetItem(durations[i]);
+        DateTimeTableWidgetItem *pDateItem = new DateTimeTableWidgetItem(dates[i]);
 
-        pDurations->setTextAlignment(Qt::AlignCenter);
-        pDates->setTextAlignment(Qt::AlignCenter);
+        pDurationItem->setData(Qt::UserRole, durations[i]);
+        pDateItem->setData(Qt::UserRole, dates[i]);
 
-        ui->personalLapTimesTable->setItem(i, 0, pDurations);
-        ui->personalLapTimesTable->setItem(i, 1, pDates);
+        pDurationItem->setTextAlignment(Qt::AlignCenter);
+        pDateItem->setTextAlignment(Qt::AlignCenter);
+
+        ui->personalLapTimesTable->setItem(i, 0, pDurationItem);
+        ui->personalLapTimesTable->setItem(i, 1, pDateItem);
     }
     ui->personalLapTimesTable->setSortingEnabled(true);
 }
@@ -184,27 +190,32 @@ void RacerView::onMainTabCurrentChanged(int index)
 
 void RacerView::onFindMyBestTimeClicked(bool)
 {
-    /* Find user best time */
-    QTableWidgetItem * pBestDurationItem = ui->personalLapTimesTable->item(0, 0);
+    QTableWidgetItem *pBestTimeItem = nullptr;
+    int bestTimeRow = -1;
 
-    for (int i = 1; i < ui->personalLapTimesTable->rowCount(); ++i)
+    for (int i = 0; i < ui->leaderboardTable->rowCount(); ++i)
     {
-        if (ui->personalLapTimesTable->item(i, 0) < pBestDurationItem)
+        if (this->userName == ui->leaderboardTable->item(i, 0)->text())
         {
-            pBestDurationItem = ui->personalLapTimesTable->item(i, 0);
+            QTableWidgetItem *pItem = ui->leaderboardTable->item(i, 1);
+
+            if (nullptr == pBestTimeItem)
+            {
+                pBestTimeItem = pItem;
+                bestTimeRow = i;
+            }
+            else if (*pItem < *pBestTimeItem)
+            {
+                pBestTimeItem = pItem;
+                bestTimeRow = i;
+            }
         }
     }
 
-    int bestDurationId = pBestDurationItem->data(Qt::UserRole).toInt();
-
-    /* Find row in leaderboard */
-    for (int i = 0; i < ui->leaderboardTable->rowCount(); ++i)
+    if (nullptr != pBestTimeItem)
     {
-        if (bestDurationId == ui->leaderboardTable->item(i, 1)->data(Qt::UserRole).toInt())
-        {
-            ui->leaderboardTable->selectRow(i);
-            break;
-        }
+        ui->leaderboardTable->selectRow(bestTimeRow);
+        ui->leaderboardTable->setFocus();
     }
 }
 
@@ -245,5 +256,32 @@ void RacerView::onCancelReservation()
         DbConnection::getInstance().cancelRaceReservation(reservedRaceRow);
 
         this->updateReservedLaps();
+    }
+}
+
+void RacerView::onPlotPersonalTimesButtonClicked(bool)
+{
+    QMap<QDateTime, QTime> personalTimes;
+
+    /* Get selected rows */
+    QItemSelectionModel *pSelectionModel = ui->personalLapTimesTable->selectionModel();
+
+    for (QModelIndex idx : pSelectionModel->selectedRows())
+    {
+        QDateTime date = ui->personalLapTimesTable->item(idx.row(), 1)->data(Qt::UserRole).toDateTime();
+        QTime time = ui->personalLapTimesTable->item(idx.row(), 0)->data(Qt::UserRole).toTime();
+
+        personalTimes.insert(date, time);
+    }
+
+    /* Display warning if 0 rows are selected */
+    if (0 == personalTimes.size())
+    {
+        QMessageBox::warning(this, "Warning", "You must select at least one row to plot.");
+    }
+    else
+    {
+        this->personalTimesPlot.plotTimes(personalTimes);
+        this->personalTimesPlot.raise();
     }
 }

@@ -17,33 +17,24 @@
    <item row="1" column="0">
     <widget class="QTabWidget" name="mainTab">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="racesTab">
       <attribute name="title">
        <string>Races</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="2" column="4">
-        <widget class="QPushButton" name="pushButton_2">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>100</width>
-           <height>16777215</height>
-          </size>
-         </property>
+       <item row="0" column="1">
+        <widget class="QLabel" name="label_2">
          <property name="text">
-          <string>Show history</string>
+          <string>Coming races:</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="3">
+       <item row="1" column="1" colspan="4">
+        <widget class="QTableWidget" name="reservedRacesTable"/>
+       </item>
+       <item row="2" column="4">
         <widget class="QPushButton" name="planNextRaceButton">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -62,16 +53,6 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>Coming races:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1" colspan="4">
-        <widget class="QTableWidget" name="reservedRacesTable"/>
-       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="personalTimesTab">
@@ -86,7 +67,20 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
+       <item row="2" column="1">
+        <widget class="QPushButton" name="plotPersonalTimesButton">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Plot times</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" colspan="2">
         <widget class="QTableWidget" name="personalLapTimesTable"/>
        </item>
       </layout>

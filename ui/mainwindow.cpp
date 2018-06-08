@@ -5,6 +5,7 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
+    pCentralWidget(new QWidget()),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
@@ -16,36 +17,14 @@ MainWindow::MainWindow(QWidget *parent) :
 
     bool dbConnected = DbConnection::getInstance().connect();
 
-    qDebug() << dbConnected;
+    ui->statusBar->addWidget(&this->statusBarLabel);
 
-    pRacerView = new RacerView(this);
-    pRacerView->setRacer(1, "Zdzisek");
-    this->setCentralWidget(pRacerView);
+    this->createMenus();
 
-//    this->loginWindow.prompt();
+    /* Initially user is logged out so display this view */
+    onLogOutActionTriggered(false);
 
-//    QSqlDatabase db = QSqlDatabase::addDatabase("QODBC");
-//    db.setDatabaseName("DRIVER={SQL SERVER};SERVER=DESKTOP-B6KDFI4\\SQLEXPRESS;DATABASE=wzemlik;");
-//    //db.setUserName("DESKTOP-B6KDFI4\\Tojwek");
-////    db.setPassword("");
-//    bool ok = db.open();
-//    qDebug() << ok;
-
-//    if (ok)
-//    {
-//        QSqlQuery query(db);
-//        query.prepare("SELECT * FROM Laps");
-//        qDebug() << query.exec() << query.lastError();
-
-//        while (query.next())
-//        {
-//            qDebug() << query.value(0).toInt()
-//                     << query.value(1).toInt()
-//                     << query.value(2).toInt()
-//                     << query.value(3).toString();
-//        }
-//    }
-
+    onLoginEntered(1, 1, "Zdzisek");
 }
 
 MainWindow::~MainWindow()
@@ -53,14 +32,86 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::onLoginEntered(int userType, QString name, QString password)
+void MainWindow::createMenus()
 {
-    static_cast<void>(userType);
-    static_cast<void>(name);
-    static_cast<void>(password);
+    pProfileMenu = new QMenu("&Profile", ui->menuBar);
+
+    pSwitchUserAction = new QAction("&Switch User", pProfileMenu);
+    pLogOutAction = new QAction("&Log Out", pProfileMenu);
+    pProfileSettings = new QAction("&Profile Settings", pProfileMenu);
+
+    pProfileMenu->addAction(pSwitchUserAction);
+    pProfileMenu->addAction(pLogOutAction);
+    pProfileMenu->addAction(pProfileSettings);
+    ui->menuBar->addMenu(pProfileMenu);
+
+    pLogOutAction->setVisible(false);
+    pProfileSettings->setVisible(false);
+
+    connect(pSwitchUserAction, &QAction::triggered,
+            this, &MainWindow::onSwitchUserActionTriggered);
+
+    connect(pLogOutAction, &QAction::triggered,
+            this, &MainWindow::onLogOutActionTriggered);
+
+    connect(pProfileSettings, &QAction::triggered,
+            this, &MainWindow::onProfileSettingsTriggered);
+}
+
+void MainWindow::onLoginEntered(int userType, int userId, QString userName)
+{
+    auto pOldCentralWidget = pCentralWidget;
+    this->currentUserId = userId;
+    this->currentUserName = userName;
+
+    switch (userType)
+    {
+    case LoginWindow::UserTypeRacer:
+        pCentralWidget = new RacerView(userId, userName);
+        break;
+    case LoginWindow::UserTypeReferee:
+        pCentralWidget = new RefereeView();
+        break;
+    default:
+        onLogOutActionTriggered(false);
+        return;
+        break;
+    }
+
+    this->setCentralWidget(pCentralWidget);
+
+    this->statusBarLabel.setText("Logged in as: " + userName + " (" + LoginWindow::userTypeToStr(userId) + ")");
+
+    delete pOldCentralWidget;
+
+    pLogOutAction->setVisible(true);
+    pProfileSettings->setVisible(true);
+    pSwitchUserAction->setText("&Switch User");
 }
 
 void MainWindow::onLoginCancelled()
 {
     qDebug() << "Cancelled";
+}
+
+void MainWindow::onSwitchUserActionTriggered(bool)
+{
+    this->loginWindow.prompt();
+}
+
+void MainWindow::onLogOutActionTriggered(bool)
+{
+    auto pOldCentralWidget = pCentralWidget;
+    this->pCentralWidget = new QWidget();
+    this->setCentralWidget(this->pCentralWidget);
+    delete pOldCentralWidget;
+    this->statusBarLabel.setText("Logged out");
+
+    pLogOutAction->setVisible(false);
+    pSwitchUserAction->setText("&Log In");
+}
+
+void MainWindow::onProfileSettingsTriggered(bool)
+{
+    profileSettings.showProfile(this->currentUserId);
 }

@@ -1,16 +1,20 @@
 use trackDay
 
 INSERT INTO userTypes VALUES ('Racer');
-INSERT INTO userTypes VALUES ('Cashier');
+INSERT INTO userTypes VALUES ('Referee');
 INSERT INTO userTypes VALUES ('Administrator');
 
 INSERT INTO users
-SELECT id, 'Zdzisek', 'b2bba6145b37e301dea598b4d23970ddc6e2f1a7'
+SELECT id, 'Zdzisek', NULL, NULL, 'ec7117851c0e5dbaad4effdb7cd17c050cea88cb'
 FROM userTypes WHERE type = 'Racer';
 
 INSERT INTO users
-SELECT id, 'TigerBonzo', '6dc669f1778f61b496d1787f0de1ec37ddbe4d6c'
+SELECT id, 'TigerBonzo', 'Franek', 'Kimono', 'ec7117851c0e5dbaad4effdb7cd17c050cea88cb'
 FROM userTypes WHERE type = 'Racer';
+
+INSERT INTO users
+SELECT id, 'Bolo', 'ec7117851c0e5dbaad4effdb7cd17c050cea88cb'
+FROM userTypes WHERE type = 'Referee';
 
 INSERT INTO cars VALUES ('Mercedes', 'SLS');
 INSERT INTO cars VALUES ('Ford', 'Focus RS');
@@ -36,5 +40,5 @@ INSERT INTO availableDates VALUES ('2018-06-24 11:00:00')
 INSERT INTO availableDates VALUES ('2018-06-26 12:00:00')
 INSERT INTO availableDates VALUES ('2018-06-26 13:00:00')
 
---INSERT INTO reservedLaps VALUES (2, 1, 1)
---INSERT INTO reservedLaps VALUES (2, 1, 2)
+INSERT INTO reservedLaps VALUES (2, 1, 1)
+INSERT INTO reservedLaps VALUES (2, 2, 2)

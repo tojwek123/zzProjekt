@@ -2,7 +2,6 @@
 #define LOGINWINDOW_H
 
 #include <QDialog>
-#include "backend/appuser.h"
 #include "backend/dbconnection.h"
 
 namespace Ui {
@@ -17,6 +16,12 @@ public:
     explicit LoginWindow(QWidget *parent = 0);
     ~LoginWindow();
 
+    static const int UserTypeRacer = 1;
+    static const int UserTypeReferee = 2;
+    static const int UserTypeAdmin = 3;
+
+    static QString userTypeToStr(int type);
+
     void prompt();
 
 private:
@@ -27,7 +32,7 @@ private slots:
     void onCancelButtonClicked(bool);
 
 signals:
-    void loginEntered(int userType, QString login, QString password);
+    void loginEntered(int userType, int userId, QString userName);
     void loginCancelled();
 };
 

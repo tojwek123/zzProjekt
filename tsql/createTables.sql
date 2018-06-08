@@ -1,6 +1,7 @@
 USE trackDay
 
 DROP PROCEDURE getAvailableCars
+DROP PROCEDURE getReservedLapsPretty
 
 DROP TABLE reservedLaps
 DROP TABLE availableDates

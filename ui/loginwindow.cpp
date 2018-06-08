@@ -13,9 +13,9 @@ LoginWindow::LoginWindow(QWidget *parent) :
     this->setFixedSize(this->size());
     this->setModal(true);
 
-    this->ui->userTypeComboBox->addItem(AppUser::typeToStr(AppUser::Racer), AppUser::Racer);
-    this->ui->userTypeComboBox->addItem(AppUser::typeToStr(AppUser::Cashier), AppUser::Cashier);
-    this->ui->userTypeComboBox->addItem(AppUser::typeToStr(AppUser::Administrator), AppUser::Administrator);
+    this->ui->userTypeComboBox->addItem(userTypeToStr(UserTypeRacer), UserTypeRacer);
+    this->ui->userTypeComboBox->addItem(userTypeToStr(UserTypeReferee), UserTypeReferee);
+    this->ui->userTypeComboBox->addItem(userTypeToStr(UserTypeAdmin), UserTypeAdmin);
 
     connect(ui->okButton, &QPushButton::clicked,
             this, &LoginWindow::onOkButtonClicked);
@@ -26,6 +26,21 @@ LoginWindow::LoginWindow(QWidget *parent) :
 LoginWindow::~LoginWindow()
 {
     delete ui;
+}
+
+QString LoginWindow::userTypeToStr(int type)
+{
+    switch (type)
+    {
+    case LoginWindow::UserTypeRacer:
+        return "Racer";
+    case LoginWindow::UserTypeReferee:
+        return "Referee";
+    case LoginWindow::UserTypeAdmin:
+        return "Administrator";
+    }
+
+    return "";
 }
 
 void LoginWindow::prompt()
@@ -49,15 +64,18 @@ void LoginWindow::onOkButtonClicked(bool)
     else
     {
         int userType = this->ui->userTypeComboBox->currentData().toInt();
-        QString name = this->ui->loginLineEdit->text();
+        QString userName = this->ui->loginLineEdit->text();
         QString password = this->ui->passwordLineEdit->text();
 
-        bool loginValid = DbConnection::getInstance().validateLogin(userType, name, password);
+        bool loginValid = DbConnection::getInstance().validateLogin(userName, password);
 
         if (loginValid)
         {
+            int userId = -1;
+            DbConnection::getInstance().fetchUserId(userName, userId);
+
             this->hide();
-            emit this->loginEntered(userType, name, password);
+            emit this->loginEntered(userType, userId, userName);
         }
         else
         {

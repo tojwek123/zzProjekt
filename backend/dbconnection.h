@@ -26,15 +26,23 @@ public:
     bool connect();
     void disconnect();
 
-    bool validateLogin(const int type, const QString &name, const QString &password);
+    bool fetchUserId(const QString &userName, int &userId);
     bool fetchRacerLaps(const int userId, QVector<QTime> &durations, QVector<QDateTime> &dates);
     bool fetchLeaderboard(QVector<QString> &names, QVector<QTime> &durations, QVector<QDateTime> &dates);
     bool fetchAvailableDates(QVector<int> &ids, QVector<QDateTime> &dates);
     bool fetchAvailableCars(const int dateId, QVector<int> &carIds, QVector<QString> &carBrands, QVector<QString> &carModels);
     bool fetchReservedLaps(const int userId, QVector<int> &reservedLapIds, QVector<QDateTime> &dates, QVector<QString> &carBrands, QVector<QString> &carModels);
+    bool fetchRaceParticipants(const int dateId, QVector<int> &userIds, QVector<QString> &userNames);
+    bool fetchUserDetails(const int userId, QString &userName, QString &firstName, QString &secondName);
 
+    bool validateLogin(const QString &name, const QString &password);
+    bool changePassword(const int userId, const QString &password);
     bool reserveLap(const int dateId, const int userId, const int carId);
-    bool cancelRaceReservation(const int reservedLapId);
+    bool deleteRaceReservation(const int reservedLapId);
+    bool deleteRaceReservationsByDateId(const int dateId);
+    bool setLapTimes(const int userId, const QTime &time, const int dateId);
+    bool deleteAvailableDate(const int dateId);
+    bool updateUserDetails(const int userId, const QString &firstName, const QString &secondName);
 
 private:
     DbConnection();

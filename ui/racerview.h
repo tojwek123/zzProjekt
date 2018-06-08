@@ -19,17 +19,16 @@ class RacerView : public QWidget
     Q_OBJECT
 
 public:
-    explicit RacerView(QWidget *parent = 0);
+    explicit RacerView(const int userId, const QString &userName, QWidget *parent = 0);
+    RacerView() = delete;
     ~RacerView();
-
-    void setRacer(const int userId, const QString &userName);
 
 private:
     static const QColor leaderboardUserRow;
 
-    Ui::RacerView *ui;
-    QString userName;
     int userId;
+    QString userName;
+    Ui::RacerView *ui;
     PlanRaceDialog planRaceDialog;
     PersonalTimesPlot personalTimesPlot;
 

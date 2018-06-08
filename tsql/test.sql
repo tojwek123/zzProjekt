@@ -1,8 +1,10 @@
 USE trackDay
 
-DELETE FROM reservedLaps WHERE id = 1
+SELECT userName, firstName, secondName FROM users WHERE id = 1
 
-SELECT * FROM reservedLaps
+--SELECT users.id, users.name FROM reservedLaps
+--INNER JOIN users ON users.id  = reservedLaps.userId
+--WHERE reservedLaps.dateId = 2
 
 --EXEC getReservedLapsPretty 1
 

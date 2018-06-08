@@ -3,8 +3,10 @@
 
 const QColor RacerView::leaderboardUserRow(240, 240, 255);
 
-RacerView::RacerView(QWidget *parent) :
+RacerView::RacerView(const int userId, const QString &userName, QWidget *parent) :
     QWidget(parent),
+    userId(userId),
+    userName(userName),
     ui(new Ui::RacerView)
 {
     ui->setupUi(this);
@@ -62,19 +64,13 @@ RacerView::RacerView(QWidget *parent) :
     ui->leaderboardTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->leaderboardTable->setColumnCount(leaderboardHeaderLabels.length());
     ui->leaderboardTable->setHorizontalHeaderLabels(leaderboardHeaderLabels);
+
+    onMainTabCurrentChanged(ui->mainTab->currentIndex());
 }
 
 RacerView::~RacerView()
 {
     delete ui;
-}
-
-void RacerView::setRacer(const int userId, const QString &userName)
-{
-    this->userId = userId;
-    this->userName = userName;
-
-    onMainTabCurrentChanged(ui->mainTab->currentIndex());
 }
 
 void RacerView::updateReservedLaps()
@@ -253,7 +249,7 @@ void RacerView::onCancelReservation()
     {
         int selectedRow = ui->reservedRacesTable->currentRow();
         int reservedRaceRow = ui->reservedRacesTable->item(selectedRow, 0)->data(Qt::UserRole).toInt();
-        DbConnection::getInstance().cancelRaceReservation(reservedRaceRow);
+        DbConnection::getInstance().deleteRaceReservation(reservedRaceRow);
 
         this->updateReservedLaps();
     }

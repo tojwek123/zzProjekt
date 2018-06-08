@@ -24,7 +24,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += main.cpp\
-    backend/appuser.cpp \
     ui/loginwindow.cpp \
     ui/mainwindow.cpp \
     ui/racerview.cpp \
@@ -34,10 +33,11 @@ SOURCES += main.cpp\
     ui/planracedialog.cpp \
     backend/specificdatescalendar.cpp \
     backend/qcustomplot/qcustomplot.cpp \
-    ui/personaltimesplot.cpp
+    ui/personaltimesplot.cpp \
+    ui/refereeview.cpp \
+    ui/profilesettings.cpp
 
 HEADERS  += \
-    backend/appuser.h \
     ui/loginwindow.h \
     ui/mainwindow.h \
     ui/racerview.h \
@@ -47,11 +47,15 @@ HEADERS  += \
     ui/planracedialog.h \
     backend/specificdatescalendar.h \
     backend/qcustomplot/qcustomplot.h \
-    ui/personaltimesplot.h
+    ui/personaltimesplot.h \
+    ui/refereeview.h \
+    ui/profilesettings.h
 
 FORMS    += \
     ui/loginwindow.ui \
     ui/mainwindow.ui \
     ui/racerview.ui \
     ui/planracedialog.ui \
-    ui/personaltimesplot.ui
+    ui/personaltimesplot.ui \
+    ui/refereeview.ui \
+    ui/profilesettings.ui

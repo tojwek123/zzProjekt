@@ -6,7 +6,7 @@ PersonalTimesPlot::PersonalTimesPlot(QWidget *parent) :
     ui(new Ui::PersonalTimesPlot)
 {
     ui->setupUi(this);
-    this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+    this->setWindowFlags((this->windowFlags() & ~Qt::WindowContextHelpButtonHint) | Qt::WindowMaximizeButtonHint);
 
     ui->plot->setInteraction(QCP::iRangeDrag, true);
     ui->plot->setInteraction(QCP::iRangeZoom, true);
@@ -45,7 +45,7 @@ void PersonalTimesPlot::plotTimes(const QMap<QDateTime, QTime> &times)
 
     for (int i = 0; i < timeValues.length(); ++i)
     {
-        x[i] = i;//dates[i].toMSecsSinceEpoch();
+        x[i] = i;
         y[i] = QTime(0, 0, 0).secsTo(timeValues[i]);
 
         xTicker->addTick(x[i], dates[i].toString("yyyy-MM-dd\nhh:mm:ss"));

@@ -14,7 +14,6 @@ LoginWindow::LoginWindow(QWidget *parent) :
     this->setModal(true);
 
     this->ui->userTypeComboBox->addItem(userTypeToStr(UserTypeRacer), UserTypeRacer);
-    this->ui->userTypeComboBox->addItem(userTypeToStr(UserTypeReferee), UserTypeReferee);
     this->ui->userTypeComboBox->addItem(userTypeToStr(UserTypeAdmin), UserTypeAdmin);
 
     connect(ui->okButton, &QPushButton::clicked,
@@ -34,8 +33,6 @@ QString LoginWindow::userTypeToStr(int type)
     {
     case LoginWindow::UserTypeRacer:
         return "Racer";
-    case LoginWindow::UserTypeReferee:
-        return "Referee";
     case LoginWindow::UserTypeAdmin:
         return "Administrator";
     }
@@ -63,11 +60,14 @@ void LoginWindow::onOkButtonClicked(bool)
     }
     else
     {
-        int userType = this->ui->userTypeComboBox->currentData().toInt();
+        int selectedUserType = this->ui->userTypeComboBox->currentData().toInt();
         QString userName = this->ui->loginLineEdit->text();
         QString password = this->ui->passwordLineEdit->text();
+        int userType;
 
-        bool loginValid = DbConnection::getInstance().validateLogin(userName, password);
+        DbConnection::getInstance().fetchUserType(userName, userType);
+
+        bool loginValid = DbConnection::getInstance().validateLogin(userName, password) & (userType == selectedUserType);
 
         if (loginValid)
         {

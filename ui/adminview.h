@@ -8,24 +8,25 @@
 #include "backend/datetimetablewidgetitem.h"
 
 namespace Ui {
-class RefereeView;
+class AdminView;
 }
 
-class RefereeView : public QWidget
+class AdminView : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit RefereeView(QWidget *parent = 0);
-    ~RefereeView();
+    explicit AdminView(QWidget *parent = 0);
+    ~AdminView();
 
 private:
-    Ui::RefereeView *ui;
+    Ui::AdminView *ui;
 
     void updateRaceTable();
 
 private slots:
     void onRacesTableItemClicked(QTableWidgetItem*);
+    void onRacesTableCellChanged(int row, int col);
     void onCloseRaceButtonClicked(bool);
 };
 

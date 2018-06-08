@@ -17,8 +17,7 @@ public:
     ~LoginWindow();
 
     static const int UserTypeRacer = 1;
-    static const int UserTypeReferee = 2;
-    static const int UserTypeAdmin = 3;
+    static const int UserTypeAdmin = 2;
 
     static QString userTypeToStr(int type);
 

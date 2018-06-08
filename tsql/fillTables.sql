@@ -1,7 +1,6 @@
 use trackDay
 
 INSERT INTO userTypes VALUES ('Racer');
-INSERT INTO userTypes VALUES ('Referee');
 INSERT INTO userTypes VALUES ('Administrator');
 
 INSERT INTO users
@@ -13,8 +12,8 @@ SELECT id, 'TigerBonzo', 'Franek', 'Kimono', 'ec7117851c0e5dbaad4effdb7cd17c050c
 FROM userTypes WHERE type = 'Racer';
 
 INSERT INTO users
-SELECT id, 'Bolo', 'ec7117851c0e5dbaad4effdb7cd17c050cea88cb'
-FROM userTypes WHERE type = 'Referee';
+SELECT id, 'Bolo', 'Franek', 'Kimono', 'ec7117851c0e5dbaad4effdb7cd17c050cea88cb'
+FROM userTypes WHERE type = 'Administrator';
 
 INSERT INTO cars VALUES ('Mercedes', 'SLS');
 INSERT INTO cars VALUES ('Ford', 'Focus RS');

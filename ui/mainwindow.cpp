@@ -24,7 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
     /* Initially user is logged out so display this view */
     onLogOutActionTriggered(false);
 
-    onLoginEntered(1, 1, "Zdzisek");
+    onLoginEntered(2, 1, "Bolo");
 }
 
 MainWindow::~MainWindow()
@@ -69,8 +69,8 @@ void MainWindow::onLoginEntered(int userType, int userId, QString userName)
     case LoginWindow::UserTypeRacer:
         pCentralWidget = new RacerView(userId, userName);
         break;
-    case LoginWindow::UserTypeReferee:
-        pCentralWidget = new RefereeView();
+    case LoginWindow::UserTypeAdmin:
+        pCentralWidget = new AdminView();
         break;
     default:
         onLogOutActionTriggered(false);
@@ -80,7 +80,7 @@ void MainWindow::onLoginEntered(int userType, int userId, QString userName)
 
     this->setCentralWidget(pCentralWidget);
 
-    this->statusBarLabel.setText("Logged in as: " + userName + " (" + LoginWindow::userTypeToStr(userId) + ")");
+    this->statusBarLabel.setText("Logged in as: " + userName + " (" + LoginWindow::userTypeToStr(userType) + ")");
 
     delete pOldCentralWidget;
 
@@ -108,6 +108,7 @@ void MainWindow::onLogOutActionTriggered(bool)
     this->statusBarLabel.setText("Logged out");
 
     pLogOutAction->setVisible(false);
+    pProfileSettings->setVisible(false);
     pSwitchUserAction->setText("&Log In");
 }
 

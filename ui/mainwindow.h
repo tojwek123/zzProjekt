@@ -7,7 +7,7 @@
 #include "loginwindow.h"
 #include "profilesettings.h"
 #include "racerview.h"
-#include "refereeview.h"
+#include "adminview.h"
 #include "backend/dbconnection.h"
 
 namespace Ui {

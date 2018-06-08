@@ -34,8 +34,8 @@ SOURCES += main.cpp\
     backend/specificdatescalendar.cpp \
     backend/qcustomplot/qcustomplot.cpp \
     ui/personaltimesplot.cpp \
-    ui/refereeview.cpp \
-    ui/profilesettings.cpp
+    ui/profilesettings.cpp \
+    ui/adminview.cpp
 
 HEADERS  += \
     ui/loginwindow.h \
@@ -48,8 +48,8 @@ HEADERS  += \
     backend/specificdatescalendar.h \
     backend/qcustomplot/qcustomplot.h \
     ui/personaltimesplot.h \
-    ui/refereeview.h \
-    ui/profilesettings.h
+    ui/profilesettings.h \
+    ui/adminview.h
 
 FORMS    += \
     ui/loginwindow.ui \
@@ -57,5 +57,5 @@ FORMS    += \
     ui/racerview.ui \
     ui/planracedialog.ui \
     ui/personaltimesplot.ui \
-    ui/refereeview.ui \
-    ui/profilesettings.ui
+    ui/profilesettings.ui \
+    ui/adminview.ui

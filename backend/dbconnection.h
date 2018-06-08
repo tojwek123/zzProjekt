@@ -34,6 +34,7 @@ public:
     bool fetchReservedLaps(const int userId, QVector<int> &reservedLapIds, QVector<QDateTime> &dates, QVector<QString> &carBrands, QVector<QString> &carModels);
     bool fetchRaceParticipants(const int dateId, QVector<int> &userIds, QVector<QString> &userNames);
     bool fetchUserDetails(const int userId, QString &userName, QString &firstName, QString &secondName);
+    bool fetchUserType(const QString &userName, int &userType);
 
     bool validateLogin(const QString &name, const QString &password);
     bool changePassword(const int userId, const QString &password);
@@ -43,6 +44,7 @@ public:
     bool setLapTimes(const int userId, const QTime &time, const int dateId);
     bool deleteAvailableDate(const int dateId);
     bool updateUserDetails(const int userId, const QString &firstName, const QString &secondName);
+    bool addRaceDate(const QDateTime &date);
 
 private:
     DbConnection();

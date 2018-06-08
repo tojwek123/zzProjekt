@@ -295,6 +295,27 @@ bool DbConnection::fetchUserDetails(const int userId, QString &userName, QString
     return ok;
 }
 
+bool DbConnection::fetchUserType(const QString &userName, int &userType)
+{
+    bool ok = false;
+
+    QSqlQuery query(this->db);
+    QString queryStr = QString("SELECT typeId FROM users WHERE name = '%1'").arg(userName);
+
+    query.prepare(queryStr);
+
+    if (query.exec())
+    {
+        if (query.first())
+        {
+            userType = query.value(0).toInt();
+            ok = true;
+        }
+    }
+
+    return ok;
+}
+
 bool DbConnection::reserveLap(const int dateId, const int userId, const int carId)
 {
     QSqlQuery query(this->db);
@@ -344,6 +365,15 @@ bool DbConnection::updateUserDetails(const int userId, const QString &firstName,
 {
     QSqlQuery query(this->db);
     QString queryStr = QString("UPDATE users SET firstName='%1', secondName='%2' WHERE id = %3").arg(firstName).arg(secondName).arg(userId);
+    query.prepare(queryStr);
+
+    return query.exec();
+}
+
+bool DbConnection::addRaceDate(const QDateTime &date)
+{
+    QSqlQuery query(this->db);
+    QString queryStr = QString("INSERT INTO availableDates VALUES ('%1')").arg(date.toString(DbDateTimeFormat));
     query.prepare(queryStr);
 
     return query.exec();

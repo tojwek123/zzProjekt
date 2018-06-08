@@ -1,24 +1,27 @@
-#include "refereeview.h"
+#include "adminview.h"
 #include "ui_refereeview.h"
 
-RefereeView::RefereeView(QWidget *parent) :
+AdminView::AdminView(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::RefereeView)
+    ui(new Ui::AdminView)
 {
     ui->setupUi(this);
 
     connect(ui->racesTable, QTableWidget::itemClicked,
-            this, RefereeView::onRacesTableItemClicked);
+            this, AdminView::onRacesTableItemClicked);
+
+    connect(ui->racesTable, QTableWidget::cellChanged,
+            this, AdminView::onRacesTableCellChanged);
 
     connect(ui->closeRaceButton, QPushButton::clicked,
-            this, RefereeView::onCloseRaceButtonClicked);
+            this, AdminView::onCloseRaceButtonClicked);
 
     QStringList racesTableColumnHeaders;
     racesTableColumnHeaders.append("Date");
     racesTableColumnHeaders.append("Number of racers");
 
     ui->racesTable->setSelectionBehavior(QAbstractItemView::SelectRows);
-    ui->racesTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+//    ui->racesTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
     ui->racesTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->racesTable->setColumnCount(racesTableColumnHeaders.length());
     ui->racesTable->setHorizontalHeaderLabels(racesTableColumnHeaders);
@@ -35,19 +38,19 @@ RefereeView::RefereeView(QWidget *parent) :
     updateRaceTable();
 }
 
-RefereeView::~RefereeView()
+AdminView::~AdminView()
 {
     delete ui;
 }
 
-void RefereeView::updateRaceTable()
+void AdminView::updateRaceTable()
 {
     QVector<int> ids;
     QVector<QDateTime> dates;
 
     DbConnection::getInstance().fetchAvailableDates(ids, dates);
     ui->racesTable->setSortingEnabled(false);
-    ui->racesTable->setRowCount(ids.length());
+    ui->racesTable->setRowCount(ids.length() + 1);
 
     for (int i = 0; i < ids.length(); ++i)
     {
@@ -57,47 +60,85 @@ void RefereeView::updateRaceTable()
         QVector<QString> userNames;
         DbConnection::getInstance().fetchRaceParticipants(ids[i], userIds, userNames);
 
+        pDateItem->setFlags(pDateItem->flags() & ~(Qt::ItemIsEditable));
         pDateItem->setTextAlignment(Qt::AlignCenter);
         pDateItem->setData(Qt::UserRole, ids[i]);
 
         QTableWidgetItem *pRacersCountItem = new QTableWidgetItem(QString::number(userIds.length()));
         pRacersCountItem->setTextAlignment(Qt::AlignCenter);
+        pRacersCountItem->setFlags(pRacersCountItem->flags() & ~(Qt::ItemIsEditable));
 
         ui->racesTable->setItem(i, 0, pDateItem);
         ui->racesTable->setItem(i, 1, pRacersCountItem);
     }
 
+    QTableWidgetItem *pAddDateItem = new QTableWidgetItem("<Click to add...>");
+    pAddDateItem->setTextAlignment(Qt::AlignCenter);
+    ui->racesTable->setItem(ids.length(), 0, pAddDateItem);
+
+    QTableWidgetItem *pDummy = new QTableWidgetItem();
+    pDummy->setFlags(pDummy->flags() & ~(Qt::ItemIsEditable));
+    ui->racesTable->setItem(ids.length(), 1, pDummy);
+
     ui->racesTable->setSortingEnabled(true);
 }
 
-void RefereeView::onRacesTableItemClicked(QTableWidgetItem*)
+void AdminView::onRacesTableItemClicked(QTableWidgetItem* pTableWidgetItem)
 {
     int currentRow = ui->racesTable->currentRow();
-    int dateId = ui->racesTable->item(currentRow, 0)->data(Qt::UserRole).toInt();
 
-    QVector<int> userIds;
-    QVector<QString> userNames;
-
-    DbConnection::getInstance().fetchRaceParticipants(dateId, userIds, userNames);
-    ui->participantsTable->setRowCount(userIds.length());
-
-    for (int i = 0; i < userIds.length(); ++i)
+    if (currentRow < ui->racesTable->rowCount() - 1)
     {
-        QTableWidgetItem *pNameItem = new QTableWidgetItem(userNames[i]);
-        pNameItem->setTextAlignment(Qt::AlignCenter);
-        pNameItem->setData(Qt::UserRole, userIds[i]);
+        int dateId = ui->racesTable->item(currentRow, 0)->data(Qt::UserRole).toInt();
 
-        QTableWidgetItem *pTimeItem = new QTableWidgetItem();
-        QTimeEdit *pTimeEdit = new QTimeEdit();
-        pTimeEdit->setDisplayFormat("mm:ss.zzz");
+        QVector<int> userIds;
+        QVector<QString> userNames;
 
-        ui->participantsTable->setItem(i, 0, pNameItem);
-        ui->participantsTable->setItem(i, 1, pTimeItem);
-        ui->participantsTable->setCellWidget(i, 1, pTimeEdit);
+        DbConnection::getInstance().fetchRaceParticipants(dateId, userIds, userNames);
+        ui->participantsTable->setRowCount(userIds.length());
+
+        for (int i = 0; i < userIds.length(); ++i)
+        {
+            QTableWidgetItem *pNameItem = new QTableWidgetItem(userNames[i]);
+            pNameItem->setTextAlignment(Qt::AlignCenter);
+            pNameItem->setData(Qt::UserRole, userIds[i]);
+
+            QTableWidgetItem *pTimeItem = new QTableWidgetItem();
+            QTimeEdit *pTimeEdit = new QTimeEdit();
+            pTimeEdit->setDisplayFormat("mm:ss.zzz");
+
+            ui->participantsTable->setItem(i, 0, pNameItem);
+            ui->participantsTable->setItem(i, 1, pTimeItem);
+            ui->participantsTable->setCellWidget(i, 1, pTimeEdit);
+        }
+    }
+    else
+    {
+        ui->participantsTable->setRowCount(0);
+        pTableWidgetItem->text().clear();
+
     }
 }
 
-void RefereeView::onCloseRaceButtonClicked(bool)
+void AdminView::onRacesTableCellChanged(int row, int col)
+{
+    if (col == 0 && row == ui->racesTable->rowCount() - 1)
+    {
+        QDateTime newDate = QDateTime::fromString(ui->racesTable->item(row, col)->text(), "dd.MM.yyyy hh:mm:ss");
+
+        if (newDate.isValid())
+        {
+            DbConnection::getInstance().addRaceDate(newDate);
+            this->updateRaceTable();
+        }
+        else
+        {
+            ui->racesTable->item(row, col)->setText("<Click to add...>");
+        }
+    }
+}
+
+void AdminView::onCloseRaceButtonClicked(bool)
 {
     if (0 == ui->racesTable->rowCount())
     {
